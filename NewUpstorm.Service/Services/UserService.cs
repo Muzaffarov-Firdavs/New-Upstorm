@@ -25,8 +25,8 @@ namespace NewUpstorm.Service.Services
 
             User mappedUser = new User()
             {
-                FirstName = userDto.Username,
-                LastName = userDto.Username,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
                 Username = userDto.Username,
                 Password = userDto.Password,
                 UserRole = userDto.UserRole,
@@ -131,7 +131,10 @@ namespace NewUpstorm.Service.Services
 
         public async ValueTask<Response<UserDto>> UpdateUserAsync(long id, UserDto userDto)
         {
-            User existedUser = await userRepository.SelectUserByIdAsync(id);
+            var res = userRepository.SelectAllUsers();
+            var existedUser = res.FirstOrDefault(i => i.Id == id);
+
+
             if (existedUser is null)
                 return new Response<UserDto>
                 {
@@ -139,18 +142,15 @@ namespace NewUpstorm.Service.Services
                     Message = "Not found"
                 };
 
-            User mappedUser = new User()
-            {
-                FirstName = userDto.Username,
-                LastName = userDto.Username,
-                Username = userDto.Username,
-                Password = userDto.Password,
-                UserRole = userDto.UserRole,
-                City = userDto.City,
-                CreatedAt = DateTime.UtcNow,
-            };
+            existedUser.FirstName = userDto.FirstName;
+            existedUser.LastName = userDto.LastName;
+            existedUser.Username = userDto.Username;
+            existedUser.Password = userDto.Password;
+            existedUser.UserRole = userDto.UserRole;
+            existedUser.City = userDto.City;
+            existedUser.UpdatedAt = DateTime.UtcNow;
 
-            User updatedUser = await userRepository.UpdateUserAsync(id,mappedUser);
+            User updatedUser = await userRepository.UpdateUserAsync(id, existedUser);
 
             UserDto mappedUserDto = new UserDto()
             {

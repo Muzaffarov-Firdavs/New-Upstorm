@@ -12,9 +12,9 @@ namespace NewUpstorm.Data.Repositories
 
         public async ValueTask<User> InsertUserAsync(User user)
         {
-            User insertedUser = (await DbContext.Users.AddAsync(user)).Entity;
+            var insertedUser = await DbContext.Users.AddAsync(user);
             DbContext.SaveChanges();
-            return insertedUser;
+            return insertedUser.Entity;
         }
 
         public async ValueTask<bool> DeleteUserAsync(long id)
@@ -41,9 +41,11 @@ namespace NewUpstorm.Data.Repositories
         public async ValueTask<User> UpdateUserAsync(long id, User user)
         {
             user.Id = id;
-            var updatedUser = (DbContext.Users.Update(user)).Entity;
+            var res = DbContext.Users.Update(user);
             DbContext.SaveChanges();
-            return updatedUser;
+            return res.Entity;
+
+            
         }
     }
 }

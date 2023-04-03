@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NewUpstorm.Data\NewUpstorm.Data.csproj" />
     <ProjectReference Include="..\NewUpstorm.Domain\NewUpstorm.Domain.csproj" />
+    <ProjectReference Include="..\NewUpstorm.Service\NewUpstorm.Service.csproj" />
   </ItemGroup>
 
 </Project>

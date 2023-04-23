@@ -9,8 +9,11 @@ namespace NewUpstorm.Service.Services
 {
     public class UserService : IUserService
     {
-        IUserRepository userRepository = new UserRepository();
-
+        private readonly IUserRepository userRepository;
+        public UserService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
 
         public async ValueTask<Response<UserDto>> AddUserAsync(UserDto userDto)
         {

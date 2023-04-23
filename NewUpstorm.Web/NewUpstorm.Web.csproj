@@ -14,4 +14,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NewUpstorm.Data\NewUpstorm.Data.csproj" />
+    <ProjectReference Include="..\NewUpstorm.Service\NewUpstorm.Service.csproj" />
+  </ItemGroup>
+
 </Project>

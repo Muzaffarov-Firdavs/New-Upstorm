@@ -6,6 +6,12 @@ namespace NewUpstorm.Data.DbContexts
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+
+        }
+
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WindInfo> WindInfos { get; set; }
         public virtual DbSet<SunTime> SunTimes { get; set; }
@@ -14,10 +20,5 @@ namespace NewUpstorm.Data.DbContexts
         public virtual DbSet<WeatherInfo> WeatherInfos { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string path = "Server=(localdb)\\mssqllocaldb;Database=MyUpstorm;Trusted_Connection=True;";
-            optionsBuilder.UseSqlServer(path);
-        }
     }
 }

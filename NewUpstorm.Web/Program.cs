@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using NewUpstorm.Data.DbContexts;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// adding configuration db path
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 
 // Add services to the container.
 

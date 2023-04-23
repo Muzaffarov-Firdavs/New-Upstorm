@@ -29,9 +29,9 @@ namespace NewUpstorm.Service.Services
             };
         }
 
-        public async ValueTask<Response<JToken>> GetWeeklyForecstsAsync(string city, string country_code)
+        public async ValueTask<Response<JToken>> GetWeeklyForecstsAsync(string city, string countryCode)
         {
-            JToken forecasts = await forecastService.SelectWeeklyForecastAsync(city, country_code);
+            JToken forecasts = await forecastService.SelectWeeklyForecastAsync(city, countryCode);
             if (forecasts.Any())
                 return new Response<JToken>
                 {

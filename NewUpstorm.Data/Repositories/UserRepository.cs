@@ -7,8 +7,11 @@ namespace NewUpstorm.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext DbContext = new AppDbContext();
-
+        private readonly AppDbContext DbContext;
+        public UserRepository(AppDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
 
         public async ValueTask<User> InsertUserAsync(User user)
         {

@@ -12,6 +12,6 @@ namespace NewUpstorm.Service.Interfaces
     public interface IForecastService
     {
         ValueTask<Response<RootObject>> GetCurrentForecastAsync(string city);
-        ValueTask<Response<JToken>> GetWeeklyForecstsAsync(string city, string country_code);
+        ValueTask<Response<JToken>> GetWeeklyForecstsAsync(string city, string countryCode);
     }
 }

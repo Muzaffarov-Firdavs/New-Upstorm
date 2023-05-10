@@ -13,12 +13,5 @@ namespace NewUpstorm.Data.DbContexts
         }
 
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<WindInfo> WindInfos { get; set; }
-        public virtual DbSet<SunTime> SunTimes { get; set; }
-        public virtual DbSet<MainInfo> MainInfos { get; set; }
-        public virtual DbSet<RootObject> RootObjects { get; set; }
-        public virtual DbSet<WeatherInfo> WeatherInfos { get; set; }
-
-
     }
 }

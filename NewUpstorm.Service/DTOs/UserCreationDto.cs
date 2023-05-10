@@ -1,10 +1,7 @@
-﻿using NewUpstorm.Domain.Enums;
-
-namespace NewUpstorm.Service.DTOs
+﻿namespace NewUpstorm.Service.DTOs
 {
-    public class UserDto
+    public class UserCreationDto
     {
-        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

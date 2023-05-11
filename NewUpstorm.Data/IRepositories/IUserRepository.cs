@@ -1,13 +1,14 @@
 ﻿using NewUpstorm.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace NewUpstorm.Data.IRepositories
 {
     public interface IUserRepository
     {
-        ValueTask<User> InsertUserAsync(User user);
-        ValueTask<User> UpdateUserAsync(long id, User user);
-        ValueTask<bool> DeleteUserAsync(long id);
-        ValueTask<User> SelectUserByIdAsync(long id);
-        IQueryable<User> SelectAllUsers();
+        ValueTask<User> InsertAsync(User user);
+        ValueTask<User> UpdateAsync(User user);
+        ValueTask<bool> DeleteAsync(Expression<Func<User, bool>> expression);
+        ValueTask<User> SelectAsync(Expression<Func<User, bool>> expression);
+        IQueryable<User> SelectAll();
     }
 }

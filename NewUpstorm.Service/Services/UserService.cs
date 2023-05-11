@@ -1,43 +1,76 @@
-﻿using NewUpstorm.Data.IRepositories;
-using NewUpstorm.Data.Repositories;
+﻿using AutoMapper;
+using NewUpstorm.Data.IRepositories;
 using NewUpstorm.Domain.Entities;
 using NewUpstorm.Service.DTOs;
-using NewUpstorm.Service.Helpers;
+using NewUpstorm.Service.Exceptions;
 using NewUpstorm.Service.Interfaces;
 
 namespace NewUpstorm.Service.Services
 {
     public class UserService : IUserService
     {
+        private readonly IMapper mapper;
         private readonly IUserRepository userRepository;
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
-        public async ValueTask<UserForResultDto> AddUserAsync(UserCreationDto userDto)
+        public async ValueTask<UserForResultDto> AddAsync(UserCreationDto userDto)
         {
-            var user = await this.userRepository.SelectUserByIdAsync()
+            var user = await this.userRepository.SelectAsync(t => t.Email == userDto.Email);
+            if (user is not null)
+                throw new CustomException(403, "User already exist");
+
+            var mappedUser = this.mapper.Map<User>(userDto);
+            var result = await this.userRepository.InsertAsync(mappedUser);
+            return this.mapper.Map<UserForResultDto>(result);
         }
 
-        public ValueTask<UserForResultDto> ModifyUserAsync(long id, UserForUpdateDto userDto)
+        public async ValueTask<UserForResultDto> ModifyAsync(UserForUpdateDto userDto)
         {
-            throw new NotImplementedException();
+            var updatingUser = await this.userRepository.SelectAsync(t => t.Email == userDto.Email);
+            if (updatingUser is null)
+                throw new CustomException(404, "User not found");
+
+            this.mapper.Map(userDto, updatingUser);
+            updatingUser.UpdatedAt = DateTime.UtcNow;
+            var result = await this.userRepository.UpdateAsync(updatingUser);
+            return this.mapper.Map<UserForResultDto>(result);
         }
 
-        public ValueTask<bool> RemoveUserAsync(long id)
+        public async ValueTask<bool> RemoveAsync(long id)
         {
-            throw new NotImplementedException();
+            var user = await this.userRepository.SelectAsync(t => t.Id == id);
+            if (user is null)
+                throw new CustomException(404, "User not found");
+
+            return await this.userRepository.DeleteAsync(user);
         }
 
-        public ValueTask<IEnumerable<UserForResultDto>> RetriewAllAsync()
+        public async ValueTask<IEnumerable<UserForResultDto>> RetriewAllAsync(string search = null)
         {
-            throw new NotImplementedException();
+            var users = this.userRepository.SelectAll();
+            var result = this.mapper.Map<IEnumerable<UserForResultDto>>(users);
+
+            if (!string.IsNullOrEmpty(search))
+                return result.Where(
+                    u => u.FirstName.ToLower().Contains(search.ToLower()) ||
+                    u.LastName.ToLower().Contains(search.ToLower()) ||
+                    u.Email.ToLower().Contains(search.ToLower()))
+                    .ToList();
+
+            return result;
         }
 
-        public ValueTask<UserForResultDto> RetriewByIdAsync(long id)
+        public async ValueTask<UserForResultDto> RetriewByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var user = await this.userRepository.SelectAsync(t => t.Id == id);
+            if (user is null)
+                throw new CustomException(404, "User not found");
+
+            return this.mapper.Map<UserForResultDto>(user);
         }
     }
 }

@@ -4,10 +4,10 @@ namespace NewUpstorm.Service.Interfaces
 {
     public interface IUserService
     {
-        ValueTask<UserForResultDto> AddUserAsync(UserCreationDto userDto);
-        ValueTask<bool> RemoveUserAsync(long id);
-        ValueTask<UserForResultDto> ModifyUserAsync(long id, UserForUpdateDto userDto);
+        ValueTask<UserForResultDto> AddAsync(UserCreationDto userDto);
+        ValueTask<bool> RemoveAsync(long id);
+        ValueTask<UserForResultDto> ModifyAsync(UserForUpdateDto userDto);
         ValueTask<UserForResultDto> RetriewByIdAsync(long id);
-        ValueTask<IEnumerable<UserForResultDto>> RetriewAllAsync();
+        ValueTask<IEnumerable<UserForResultDto>> RetriewAllAsync(string search = null);
     }
 }

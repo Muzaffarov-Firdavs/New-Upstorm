@@ -2,6 +2,7 @@
 using NewUpstorm.Data.DbContexts;
 using NewUpstorm.Data.IRepositories;
 using NewUpstorm.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace NewUpstorm.Data.Repositories
 {
@@ -13,42 +14,36 @@ namespace NewUpstorm.Data.Repositories
             DbContext = dbContext;
         }
 
-        public async ValueTask<User> InsertUserAsync(User user)
+        public async ValueTask<bool> DeleteAsync(User user)
         {
-            var insertedUser = await DbContext.Users.AddAsync(user);
-            DbContext.SaveChanges();
-            return insertedUser.Entity;
-        }
-
-        public async ValueTask<bool> DeleteUserAsync(long id)
-        {
-            User model = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (model is null)
-                return false;
-
-            DbContext.Users.Remove(model);
-            DbContext.SaveChanges();
+            this.DbContext.Users.Remove(user);
+            await this.DbContext.SaveChangesAsync();
             return true;
         }
 
-        public IQueryable<User> SelectAllUsers()
+        public async ValueTask<User> InsertAsync(User user)
         {
-            return DbContext.Users.Where(user => true);
+            var enteredUser = await this.DbContext.Users.AddAsync(user);
+            await this.DbContext.SaveChangesAsync();
+            return enteredUser.Entity;
         }
 
-        public async ValueTask<User> SelectUserByIdAsync(long id)
+        public IQueryable<User> SelectAll(Expression<Func<User, bool>> expression = null)
         {
-            return await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (expression is not null)
+                return this.DbContext.Users.Where(expression);
+
+            return this.DbContext.Users;
         }
 
-        public async ValueTask<User> UpdateUserAsync(long id, User user)
-        {
-            user.Id = id;
-            var res = DbContext.Users.Update(user);
-            DbContext.SaveChanges();
-            return res.Entity;
+        public async ValueTask<User> SelectAsync(Expression<Func<User, bool>> expression)
+           => await this.DbContext.Users.FirstOrDefaultAsync(expression);
 
-            
+        public async ValueTask<User> UpdateAsync(User user)
+        {
+            var updatedUser = this.DbContext.Users.Update(user);
+            await this.DbContext.SaveChangesAsync();
+            return updatedUser.Entity;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NewUpstorm.Service.DTOs
 {
-    public class UserDto
+    public class UserForResultDto
     {
         public long Id { get; set; }
         public string FirstName { get; set; }

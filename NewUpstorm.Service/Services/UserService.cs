@@ -15,12 +15,12 @@ namespace NewUpstorm.Service.Services
             this.userRepository = userRepository;
         }
 
-        public async ValueTask<Response<UserDto>> AddUserAsync(UserDto userDto)
+        public async ValueTask<Response<UserForResultDto>> AddUserAsync(UserForResultDto userDto)
         {
             List<User> existingUser = (userRepository.SelectAllUsers())
                         .Where(u => u.Username == userDto.Username).Take(1).ToList();
             if (existingUser.Any())
-                return new Response<UserDto>
+                return new Response<UserForResultDto>
                 {
                     StatusCode = 400,
                     Message = "Username is already taken"
@@ -39,7 +39,7 @@ namespace NewUpstorm.Service.Services
 
             User insertedUser = await userRepository.InsertUserAsync(mappedUser);
 
-            UserDto mappedUserDto = new UserDto()
+            UserForResultDto mappedUserDto = new UserForResultDto()
             {
                 FirstName = insertedUser.FirstName,
                 LastName = insertedUser.LastName,
@@ -49,7 +49,7 @@ namespace NewUpstorm.Service.Services
                 City = insertedUser.City,
             };
 
-            return new Response<UserDto>
+            return new Response<UserForResultDto>
             {
                 StatusCode = 200,
                 Message = "Success",
@@ -77,15 +77,15 @@ namespace NewUpstorm.Service.Services
             };
         }
 
-        public async ValueTask<Response<List<UserDto>>> GetAllUsersAsync()
+        public async ValueTask<Response<List<UserForResultDto>>> GetAllUsersAsync()
         {
             List<User> users = userRepository.SelectAllUsers().ToList();
 
-            List<UserDto> userDtos = new List<UserDto>();
+            List<UserForResultDto> userDtos = new List<UserForResultDto>();
 
             foreach (User user in users)
             {
-                userDtos.Add(new UserDto
+                userDtos.Add(new UserForResultDto
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
@@ -96,7 +96,7 @@ namespace NewUpstorm.Service.Services
                 });
             }
 
-            return new Response<List<UserDto>>
+            return new Response<List<UserForResultDto>>
             {
                 StatusCode = 200,
                 Message = "Success",
@@ -104,17 +104,17 @@ namespace NewUpstorm.Service.Services
             };
         }
 
-        public async ValueTask<Response<UserDto>> GetUserByIdAsync(long id)
+        public async ValueTask<Response<UserForResultDto>> GetUserByIdAsync(long id)
         {
             User user = await userRepository.SelectUserByIdAsync(id);
             if (user is null)
-                return new Response<UserDto>
+                return new Response<UserForResultDto>
                 {
                     StatusCode = 404,
                     Message = "Not found"
                 };
 
-            UserDto mappedUserDto = new UserDto()
+            UserForResultDto mappedUserDto = new UserForResultDto()
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -124,7 +124,7 @@ namespace NewUpstorm.Service.Services
                 City = user.City
             };
 
-            return new Response<UserDto>
+            return new Response<UserForResultDto>
             {
                 StatusCode = 200,
                 Message = "Success",
@@ -132,14 +132,14 @@ namespace NewUpstorm.Service.Services
             };
         }
 
-        public async ValueTask<Response<UserDto>> UpdateUserAsync(long id, UserDto userDto)
+        public async ValueTask<Response<UserForResultDto>> UpdateUserAsync(long id, UserForResultDto userDto)
         {
             var res = userRepository.SelectAllUsers();
             var existedUser = res.FirstOrDefault(i => i.Id == id);
 
 
             if (existedUser is null)
-                return new Response<UserDto>
+                return new Response<UserForResultDto>
                 {
                     StatusCode = 404,
                     Message = "Not found"
@@ -155,7 +155,7 @@ namespace NewUpstorm.Service.Services
 
             User updatedUser = await userRepository.UpdateUserAsync(id, existedUser);
 
-            UserDto mappedUserDto = new UserDto()
+            UserForResultDto mappedUserDto = new UserForResultDto()
             {
                 FirstName = updatedUser.FirstName,
                 LastName = updatedUser.LastName,
@@ -165,7 +165,7 @@ namespace NewUpstorm.Service.Services
                 City = updatedUser.City,
             };
 
-            return new Response<UserDto>
+            return new Response<UserForResultDto>
             {
                 StatusCode = 200,
                 Message = "Success",

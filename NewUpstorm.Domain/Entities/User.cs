@@ -1,4 +1,5 @@
 ﻿using NewUpstorm.Domain.Enums;
+using System;
 
 namespace NewUpstorm.Domain.Entities
 {
@@ -12,6 +13,6 @@ namespace NewUpstorm.Domain.Entities
         public UserRole UserRole { get; set; }
         public string City { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set;}
+        public DateTime? UpdatedAt { get; set;}
     }
 }

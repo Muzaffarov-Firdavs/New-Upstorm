@@ -29,7 +29,7 @@ namespace NewUpstorm.Web.Controllers
             => Ok(await this.userService.RetriewByIdAsync(id));
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetAsync(string search = null)
+        public async Task<IActionResult> GetAllAsync([FromForm]string search = null)
             => Ok(await this.userService.RetriewAllAsync(search));
     }
 }

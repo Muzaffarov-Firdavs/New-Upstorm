@@ -1,31 +1,52 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NewUpstorm.Data.IRepositories;
 using NewUpstorm.Data.Repositories;
 using NewUpstorm.Domain.Entities;
+using NewUpstorm.Service.Configurations;
+using NewUpstorm.Service.Exceptions;
 using NewUpstorm.Service.Interfaces;
 
 namespace NewUpstorm.Service.Services
 {
     public class ForecastService : IForecastService
     {
-        private readonly IForecastRepository forecastService = new ForecastRepository();
+        string path = AppAPISetting.PATH;
+        string weeklyPath = AppAPISetting.WEEKLY_PATH;
 
         public async ValueTask<RootObject> GetCurrentForecastAsync(string city)
         {
-            RootObject weather = await forecastService.SelectCurrentForecastAsync(city);
-            if (weather is null)
-                return new RootObject();
+            path = path.Replace("Tashkent", city);
 
-            return new RootObject();
+            HttpClient client = new HttpClient();
+            var response = (await client.GetAsync(path));
+            string content = await response.Content.ReadAsStringAsync();
+            RootObject weather = JsonConvert.DeserializeObject<RootObject>(content);
+
+            if (weather is null)
+                throw new CustomException(401, "API configuration error");
+
+            return weather;
         }
 
         public async ValueTask<JToken> GetWeeklyForecstsAsync(string city, string countryCode)
         {
-            JToken forecasts = await forecastService.SelectWeeklyForecastAsync(city, countryCode);
-            if (forecasts.Any())
-                return null;
+            path = path.Replace("Tashkent", city).Replace("uz", countryCode);
 
-            return forecasts;
+            using (var httpClient = new HttpClient())
+            {
+                var response = httpClient.GetAsync(path).Result;
+                var content = response.Content.ReadAsStringAsync().Result;
+
+                var data = JObject.Parse(content);
+
+                var forecasts = data["list"];
+
+                if (forecasts.Any())
+                    throw new CustomException(401, "API configuration error");
+
+                return forecasts;
+            }
         }
     }
 }

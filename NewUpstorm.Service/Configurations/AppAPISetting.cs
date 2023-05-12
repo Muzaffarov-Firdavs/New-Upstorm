@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using NewUpstorm.Domain.Entities;
-using System.Runtime.InteropServices;
-using static System.Net.WebRequestMethods;
-
-namespace NewUpstorm.Data.Configurations
+﻿namespace NewUpstorm.Service.Configurations
 {
     public class AppAPISetting
     {

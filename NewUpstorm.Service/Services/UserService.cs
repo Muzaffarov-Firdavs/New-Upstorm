@@ -30,7 +30,7 @@ namespace NewUpstorm.Service.Services
 
         public async ValueTask<UserForResultDto> ModifyAsync(UserForUpdateDto userDto)
         {
-            var updatingUser = await this.userRepository.SelectAsync(t => t.Email == userDto.Email);
+            var updatingUser = await this.userRepository.SelectAsync(t => t.Id == userDto.Id);
             if (updatingUser is null)
                 throw new CustomException(404, "User not found");
 

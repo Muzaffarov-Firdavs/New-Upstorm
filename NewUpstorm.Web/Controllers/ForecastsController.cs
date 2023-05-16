@@ -21,8 +21,9 @@ namespace NewUpstorm.Web.Controllers
             });
 
         [HttpGet("weekly")]
-        public async Task<IActionResult> GetWeeklyAsync(string city, string countryCode)
-        => Ok(new
+        public async Task<IActionResult> GetWeeklyAsync([FromQuery] string city, string countryCode)
+        => 
+            Ok(new
         {
             Code = 200,
             Message = "Success",

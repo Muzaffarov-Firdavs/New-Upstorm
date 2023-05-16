@@ -29,23 +29,23 @@ namespace NewUpstorm.Service.Services
             return weather;
         }
 
-        public async ValueTask<JToken> GetWeeklyForecstsAsync(string city, string countryCode)
+        public async Task<List<RootObject>> GetWeeklyForecstsAsync(string city, string countryCode)
         {
-            path = path.Replace("Tashkent", city).Replace("uz", countryCode);
+            string path = weeklyPath.Replace("Tashkent", city).Replace("uz", countryCode);
 
             using (var httpClient = new HttpClient())
             {
-                var response = httpClient.GetAsync(path).Result;
-                var content = response.Content.ReadAsStringAsync().Result;
+                var response = await httpClient.GetAsync(path);
+                var content = await response.Content.ReadAsStringAsync();
 
                 var data = JObject.Parse(content);
-
                 var forecasts = data["list"];
 
-                if (forecasts.Any())
+                if (forecasts == null || !forecasts.Any())
                     throw new CustomException(401, "API configuration error");
 
-                return forecasts;
+                var results = forecasts.ToObject<List<RootObject>>();
+                return results;
             }
         }
     }

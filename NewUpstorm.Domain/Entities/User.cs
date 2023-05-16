@@ -11,7 +11,6 @@ namespace NewUpstorm.Domain.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public UserRole UserRole { get; set; }
-        public string City { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set;}
     }

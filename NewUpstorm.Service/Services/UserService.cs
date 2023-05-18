@@ -90,7 +90,7 @@ namespace NewUpstorm.Service.Services
 
         public async ValueTask<UserForResultDto> UserVerify(string code)
         {
-
+            throw new NotImplementedException();
         }
 
         public async ValueTask<UserForResultDto> CheckUserAsync(string email, string password = null)

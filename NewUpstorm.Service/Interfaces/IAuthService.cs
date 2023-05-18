@@ -2,6 +2,6 @@
 {
     public interface IAuthService
     {
-        ValueTask<string> GenerateTokenASync(string surename, string password);
+        ValueTask<string> GenerateTokenASync(string email, string password);
     }
 }

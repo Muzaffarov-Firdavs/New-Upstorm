@@ -72,5 +72,33 @@ namespace NewUpstorm.Service.Services
 
             return this.mapper.Map<UserForResultDto>(user);
         }
+
+        public async ValueTask<UserForResultDto> ChangePaswordAsync(UserForPasswordDto userDto)
+        {
+            var existUser = await this.userRepository.SelectAsync(t => t.Email.ToLower() == userDto.Email.ToLower());
+            if (existUser is null)
+                throw new Exception("This username is not exist");
+            else if (userDto.NewPasswword != userDto.ConfirmPassword)
+                throw new Exception("New password and confirm password are not equal");
+            else if (existUser.Password != userDto.NewPasswword)
+                throw new Exception("Paassword is incorrect");
+
+            existUser.Password = userDto.ConfirmPassword;
+            await this.userRepository.UpdateAsync(existUser);
+            return this.mapper.Map<UserForResultDto>(existUser);
+        }
+
+        public async ValueTask<UserForResultDto> UserVerify(string code)
+        {
+
+        }
+
+        public async ValueTask<UserForResultDto> CheckUserAsync(string email, string password = null)
+        {
+            var user = await this.userRepository.SelectAsync(t => t.Email.ToLower() == email.ToLower());
+            if (user is null)
+                throw new CustomException(404, "User is not found");
+            return this.mapper.Map<UserForResultDto>(user);
+        }
     }
 }

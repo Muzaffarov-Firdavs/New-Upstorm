@@ -9,5 +9,8 @@ namespace NewUpstorm.Service.Interfaces
         ValueTask<UserForResultDto> ModifyAsync(UserForUpdateDto userDto);
         ValueTask<UserForResultDto> RetriewByIdAsync(long id);
         ValueTask<IEnumerable<UserForResultDto>> RetriewAllAsync(string search = null);
+        ValueTask<UserForResultDto> ChangePaswordAsync(UserForPasswordDto userDto);
+        ValueTask<UserForResultDto> CheckUserAsync(string email, string password = null);
+        ValueTask<UserForResultDto> UserVerify(string code);
     }
 }

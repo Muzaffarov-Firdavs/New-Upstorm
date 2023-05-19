@@ -11,6 +11,8 @@ namespace NewUpstorm.Web.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IForecastService, ForecastService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
         }

@@ -2,7 +2,7 @@
 
 namespace NewUpstorm.Web.Helpers
 {
-    public class RouteConfiguration
+    public class RouteConfiguration : IOutboundParameterTransformer
     {
         public string TransformOutbound(object value)
         {

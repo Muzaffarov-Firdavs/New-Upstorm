@@ -224,3 +224,5 @@ AppPackages/
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
+/NewUpstorm.Web/Logs/RestApiLog202305211720.log
+/NewUpstorm.Web/Logs/RestApiLog202305211721.log

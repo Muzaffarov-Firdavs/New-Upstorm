@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NewUpstorm.Data.DbContexts;
 using NewUpstorm.Service.Mappers;
 using NewUpstorm.Web.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,14 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerService();
 // JWT servies
 builder.Services.AddJwtService(builder.Configuration);
+// Logger
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+
 
 
 var app = builder.Build();

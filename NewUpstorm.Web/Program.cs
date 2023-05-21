@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using NewUpstorm.Data.DbContexts;
 using NewUpstorm.Service.Mappers;
 using NewUpstorm.Web.Extensions;
+using NewUpstorm.Web.Helpers;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +27,10 @@ var logger = new LoggerConfiguration()
   .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
-
+// convert api url name to dash case
+builder.Services.AddControllers(options =>
+    options.Conventions.Add(
+        new RouteTokenTransformerConvention(new RouteConfiguration())));
 
 
 var app = builder.Build();

@@ -4,6 +4,7 @@ using NewUpstorm.Data.DbContexts;
 using NewUpstorm.Service.Mappers;
 using NewUpstorm.Web.Extensions;
 using NewUpstorm.Web.Helpers;
+using NewUpstorm.Web.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+app.UseAuthorization();
 
 app.UseAuthorization();
 

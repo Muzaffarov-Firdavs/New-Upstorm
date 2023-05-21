@@ -9,15 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+// add custom services
 builder.Services.AddCustomServices();
-
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerService();
 
 var app = builder.Build();
 

@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="MailKit" Version="4.0.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.111" />

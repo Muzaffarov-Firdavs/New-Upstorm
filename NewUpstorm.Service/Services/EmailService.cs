@@ -1,10 +1,11 @@
-﻿using MimeKit;
-using MimeKit.Text;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
-using StackExchange.Redis;
-using NewUpstorm.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
+using MimeKit;
+using MimeKit.Text;
+using NewUpstorm.Service.Exceptions;
+using NewUpstorm.Service.Interfaces;
+using StackExchange.Redis;
 
 namespace NewUpstorm.Service.Services
 {
@@ -18,27 +19,34 @@ namespace NewUpstorm.Service.Services
 
         public async ValueTask<string> SendEmailAsync(string to)
         {
-            Random random = new Random();
-            int verificationCode = random.Next(123456, 999999);
+            try
+            {
+                Random random = new Random();
+                int verificationCode = random.Next(123456, 999999);
 
-            ConnectionMultiplexer redisConnect = ConnectionMultiplexer.Connect("localhost");
-            IDatabase db = redisConnect.GetDatabase();
-            db.StringSet("code", verificationCode.ToString());
-            var result = db.StringGet("code");
+                ConnectionMultiplexer redisConnect = ConnectionMultiplexer.Connect("localhost");
+                IDatabase db = redisConnect.GetDatabase();
+                db.StringSet("code", verificationCode.ToString());
+                var result = db.StringGet("code");
 
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(this.configuration["EmailAddress"]));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = "Email verification upstorm.uz";
-            email.Body = new TextPart(TextFormat.Html) { Text = verificationCode.ToString() };
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse(this.configuration["EmailAddress"]));
+                email.To.Add(MailboxAddress.Parse(to));
+                email.Subject = "Email verification upstorm.uz";
+                email.Body = new TextPart(TextFormat.Html) { Text = verificationCode.ToString() };
 
-            var sendMessage = new SmtpClient();
-            await sendMessage.ConnectAsync(this.configuration["Host"], 587, SecureSocketOptions.StartTls);
-            await sendMessage.AuthenticateAsync(this.configuration["EmailAddress"], this.configuration["Password"]);
-            await sendMessage.SendAsync(email);
-            await sendMessage.DisconnectAsync(true);
+                var sendMessage = new SmtpClient();
+                await sendMessage.ConnectAsync(this.configuration["Host"], 587, SecureSocketOptions.StartTls);
+                await sendMessage.AuthenticateAsync(this.configuration["EmailAddress"], this.configuration["Password"]);
+                await sendMessage.SendAsync(email);
+                await sendMessage.DisconnectAsync(true);
 
-            return verificationCode.ToString();
+                return verificationCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(400, ex.Message);
+            }
         }
     }
 }

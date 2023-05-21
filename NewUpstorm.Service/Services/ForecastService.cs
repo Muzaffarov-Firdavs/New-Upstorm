@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NewUpstorm.Data.IRepositories;
+using NewUpstorm.Data.Repositories;
 using NewUpstorm.Domain.Entities;
+using NewUpstorm.Service.Configurations;
 using NewUpstorm.Service.Exceptions;
 using NewUpstorm.Service.Interfaces;
-using NewUpstorm.Service.Configurations;
 
 namespace NewUpstorm.Service.Services
 {
@@ -21,7 +23,7 @@ namespace NewUpstorm.Service.Services
             string content = await response.Content.ReadAsStringAsync();
             RootObject weather = JsonConvert.DeserializeObject<RootObject>(content);
 
-            if (weather.MainInfo is null)
+            if (weather is null)
                 throw new CustomException(401, "API configuration error");
 
             return weather;

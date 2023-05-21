@@ -1,11 +1,11 @@
-using Serilog;
-using NewUpstorm.Web.Helpers;
-using NewUpstorm.Web.Extensions;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.EntityFrameworkCore;
 using NewUpstorm.Data.DbContexts;
 using NewUpstorm.Service.Mappers;
+using NewUpstorm.Web.Extensions;
+using NewUpstorm.Web.Helpers;
 using NewUpstorm.Web.Middlewares;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 

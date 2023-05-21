@@ -1,10 +1,13 @@
-﻿using Microsoft.OpenApi.Any;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using NewUpstorm.Data.IRepositories;
 using NewUpstorm.Data.Repositories;
 using NewUpstorm.Service.Interfaces;
 using NewUpstorm.Service.Services;
 using System.Reflection;
+using System.Text;
 
 namespace NewUpstorm.Web.Extensions
 {
@@ -51,5 +54,29 @@ namespace NewUpstorm.Web.Extensions
                 });
             });
         }
+
+        public static void AddJwtService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                var Key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key)
+                };
+            });
+        }
+
     }
 }

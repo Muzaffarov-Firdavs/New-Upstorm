@@ -13,8 +13,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddCustomServices();
 // Add services to the container.
 builder.Services.AddControllers();
-
+// set up swagger 
 builder.Services.AddSwaggerService();
+// JWT servies
+builder.Services.AddJwtService(builder.Configuration);
+
 
 var app = builder.Build();
 

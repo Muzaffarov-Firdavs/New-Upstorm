@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Any;
+﻿using System.Text;
+using System.Reflection;
 using Microsoft.OpenApi.Models;
-using NewUpstorm.Data.IRepositories;
+using NewUpstorm.Service.Services;
 using NewUpstorm.Data.Repositories;
 using NewUpstorm.Service.Interfaces;
-using NewUpstorm.Service.Services;
-using System.Reflection;
-using System.Text;
+using NewUpstorm.Data.IRepositories;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace NewUpstorm.Web.Extensions
 {
